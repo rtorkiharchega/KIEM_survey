@@ -104,14 +104,14 @@
   
   <script>
     function submitFeedback(response) {
-    const map = {
+      const map = {
         happy: 'satisfied',
         neutral: 'neutral',
         sad: 'not satisfied'
-    };
+      };
 
-    const now = new Date();
-    const amsterdamTime = new Intl.DateTimeFormat('nl-NL', {
+      const now = new Date();
+      const amsterdamTime = new Intl.DateTimeFormat('nl-NL', {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
@@ -120,31 +120,32 @@
         second: '2-digit',
         hour12: false,
         timeZone: 'Europe/Amsterdam'
-    }).format(now).replace(',', '');
+      }).format(now).replace(',', '');
 
-    const entry = {
+      const entry = {
         datetime: amsterdamTime,
         response: map[response]
-    };
+      };
 
-    fetch("https://script.google.com/macros/s/AKfycbw8glgYuhNCxJ-25uvRZDcj8ruX6u3kIR2k2txUualgnw-S-dnoN3PB0nhyzXqba3yNGQ/exec", {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        datetime: '...',
-        response: '...'
+      fetch("https://script.google.com/macros/s/AKfycbw8glgYuhNCxJ-25uvRZDcj8ruX6u3kIR2k2txUualgnw-S-dnoN3PB0nhyzXqba3yNGQ/exec", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(entry)
       })
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log('Success:', data);
-    })
-    .catch(err => {
-      console.error('Error sending to Google Sheets:', err);
-    });
-          
+      .then(res => res.json())
+      .then(data => {
+        console.log('Success:', data);
+        document.getElementById('thanks').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('thanks').style.display = 'none';
+        }, 1500);
+      })
+      .catch(err => {
+        console.error('Error sending to Google Sheets:', err);
+        alert("Fout bij verzenden naar Google Sheets: " + err.message);
+      });
     }
 
     function exportCSV() {
