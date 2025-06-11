@@ -128,16 +128,23 @@
     };
 
     fetch("https://script.google.com/macros/s/AKfycbw8glgYuhNCxJ-25uvRZDcj8ruX6u3kIR2k2txUualgnw-S-dnoN3PB0nhyzXqba3yNGQ/exec", {
-        method: 'POST',
-        body: JSON.stringify(entry),
-        headers: { 'Content-Type': 'application/json' }
-    }).then(res => {
-        const thanks = document.getElementById('thanks');
-        thanks.style.display = 'block';
-        setTimeout(() => { thanks.style.display = 'none'; }, 1500);
-    }).catch(err => {
-        alert('Fout bij verzenden naar Google Sheets: ' + err.message);
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        datetime: '...',
+        response: '...'
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log('Success:', data);
+    })
+    .catch(err => {
+      console.error('Error sending to Google Sheets:', err);
     });
+          
     }
 
     function exportCSV() {
